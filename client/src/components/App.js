@@ -1,4 +1,20 @@
 import { useEffect, useState } from 'react';
+import Board from './Board';
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+    :root {
+      --black: black;
+      --white: #bcbbbf;
+      --purple: #270973;
+      --dark-grey: #111;
+    }
+
+    body {
+      background-color: var(--dark-grey);
+      color: var(--white);
+    }
+`
 
 function App() {
 
@@ -15,7 +31,11 @@ function App() {
   }, []);
 
   return (
-    <h1>{gameState.pieces}</h1>
+    <>
+      <GlobalStyle />
+      <h1>{gameState.pieces}</h1>
+      <Board />
+    </>
   );
 }
 
