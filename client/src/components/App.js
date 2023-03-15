@@ -34,7 +34,7 @@ function App() {
     <>
       <GlobalStyle />
       <h1>{gameState.pieces}</h1>
-      <Board />
+      <Board gameState={gameState}/>
     </>
   );
 }
