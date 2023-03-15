@@ -3,8 +3,8 @@ from sqlalchemy_serializer import SerializerMixin
 
 db = SQLAlchemy()
 
-class Game(db.Model, SerializerMixin):
-    __tablenames__ = 'games'
+class Move(db.Model, SerializerMixin):
+    __tablename__ = 'moves'
 
     id = db.Column(db.Integer, primary_key=True)
     pieces = db.Column(db.String)

@@ -1,30 +1,12 @@
 from app import app
-from models import db, Game
+from models import db, Move
 
 with app.app_context():
-    Game.query.delete()
+    Move.query.delete()
 
-    starting_position = Game(
-        pieces = '''
-            RHBQKBHR
-            PPPPPPPP
-            EEEEEEEE
-            EEEEEEEE
-            EEEEEEEE
-            EEEEEEEE
-            PPPPPPPP
-            RHBQKBHR
-        ''',
-        colors = '''
-            BBBBBBBB
-            BBBBBBBB
-            EEEEEEEE
-            EEEEEEEE
-            EEEEEEEE
-            EEEEEEEE
-            WWWWWWWW
-            WWWWWWWW
-        ''',
+    starting_position = Move(
+        pieces = 'RHBQKBHRPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEPPPPPPPPRHBQKBHR',
+        colors = 'BBBBBBBBBBBBBBBBEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWW',
         whites_turn = True
     )
 
