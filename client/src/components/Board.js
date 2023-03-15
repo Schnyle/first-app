@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import Draggable from 'react-draggable';
 
 import bbPng from './pieces/bb.png';
 import bhPng from './pieces/bh.png';
@@ -56,6 +57,30 @@ const BoardStyle = createGlobalStyle`
 
 function Board({ gameState }) {
 
+    const state = {
+        activeDrags: 0
+    }
+
+    const handleDrag = (e, ui) => {
+        console.log('handleDrag')
+        const {x, y} = ui.deltaPosition || {};
+        ui.position = {
+          x: x,
+          y: y
+        };
+        console.log(ui.position)
+      };
+
+    const onStart = () => {
+      ++state.activeDrags
+      console.log('onStart')
+    };
+    
+    const onStop = () => {
+      --state.activeDrags;
+      console.log('onStop');
+    };
+
     const pieces_array = gameState.pieces.split('')
     const colors_array = gameState.colors.split('')
     if (pieces_array.length == 0 || colors_array.length == 0) {
@@ -82,7 +107,13 @@ function Board({ gameState }) {
 
         boardDivs.push(
           <div className={`${shade}-square`} key={i}>
-            <img src={piecePng}/>
+            <Draggable 
+              onDrag={handleDrag}
+              onStart={onStart}
+              onStop={onStop}
+            >
+              <img draggable='false' src={piecePng}/>
+            </Draggable>
           </div>
         )
         
