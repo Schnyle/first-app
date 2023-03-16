@@ -16,42 +16,51 @@ const BoardStyle = createGlobalStyle`
         transform: translate(-50%, -50%);
     }
 
-    .light-square {
+    .light-square, .dark-square, .trans-square {
         height: 5vw;
-        background-color: var(--white);
+        width: 5vw;
         display: flex;
+    }
+
+    .trans-square {
+      border: 1px solid black;
+      opacity: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .light-square {
+        background-color: var(--white);
     }
 
     .dark-square {
-        height: 5vw;
         background-color: var(--purple);
-        display: flex;
     }
 
-    .img {
-        height: 5vw;
-        width: 5vw;
-        margin: 0;
+    img {
+      z-index: 0;
     }
 
 `
 
 function Board({ gameState }) {
     const state = {
-        activeDrags: 0
+        activeDrags: 0,
+        deltaPosition: {x: 0, y: 0}
     }
 
     const handleDrag = (e, ui) => {
-        const {x, y} = ui.deltaPosition || {};
-        ui.position = {
-            x: x,
-            y: y
+        const {x, y} = state.deltaPosition;
+        state.deltaPosition = {
+          x: x + ui.deltaX,
+          y: y + ui.deltaY
         };
     };
-    const onStart = () => {
+    const onStart = (e) => {
         ++state.activeDrags
     };
-    const onStop = () => {
+    const onStop = (e) => {
         --state.activeDrags;
     };
 
@@ -82,17 +91,25 @@ function Board({ gameState }) {
             piecePng = piece_dictionary[`${color}${piece}`]
         };
 
+        const square_id = `square${i}`;
         boardDivs.push(
-          <div className={`${shade}-square`} key={i}>
+          <div 
+            className={`${shade}-square`} 
+            key={i}
+          >
             <Draggable 
               onDrag={handleDrag}
               onStart={onStart}
               onStop={onStop}
               bounds='.board-container'
-              // offsetParent={document.querySelector('.board-container')}
             >
-              <img draggable='false' src={piecePng}/>
+              <img draggable='false' src={piecePng} />
             </Draggable>
+            <div 
+              id={square_id} 
+              className='trans-square' 
+              onMouseMove={(e) => console.log(e.target.id)}
+            ></div>
           </div>
         )
         

@@ -33,7 +33,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <h1>{gameState.pieces}</h1>
+      <h1>Chess by Kyle</h1>
       <Board gameState={gameState}/>
     </>
   );
