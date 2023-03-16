@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Board from './Board';
 import { createGlobalStyle } from 'styled-components';
 
+\\test
+
 const GlobalStyle = createGlobalStyle`
     :root {
       --black: black;
@@ -47,3 +49,4 @@ function App() {
 }
 
 export default App;
+
