@@ -10,3 +10,5 @@ class Move(db.Model, SerializerMixin):
     pieces = db.Column(db.String)
     colors = db.Column(db.String)
     whites_turn = db.Column(db.Boolean)
+    fromIndex = db.Column(db.Integer)
+    toIndex = db.Column(db.Integer)

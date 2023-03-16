@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import Board from './Board';
 import { createGlobalStyle } from 'styled-components';
 
-\\test
-
 const GlobalStyle = createGlobalStyle`
     :root {
       --black: black;
@@ -33,7 +31,17 @@ function App() {
   }, []);
 
   function handleMove(fromIndex, toIndex) {
-    console.log(fromIndex, toIndex)
+    console.log(fromIndex, toIndex);
+    const configObj = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify({fromIndex, toIndex,}),
+    };
+    fetch('http://127.0.0.1:5555/moves', configObj)
+      .then()
   };
 
   return (
