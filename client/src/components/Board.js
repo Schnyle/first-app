@@ -47,6 +47,9 @@ const BoardStyle = createGlobalStyle`
 const getSquares = (posDiff, square_dim) => {
   const posDiffSign = (posDiff > 0 ? 1 : -1)
   let squares = posDiffSign
+  if (Math.abs(posDiff) < square_dim / 2) {
+    return 0
+  };
   posDiff = posDiff - (posDiffSign * square_dim / 2)
   while(Math.abs(posDiff) > square_dim) {
     squares += (posDiffSign)
@@ -57,8 +60,8 @@ const getSquares = (posDiff, square_dim) => {
 
 function Board({ gameState }) {
 
-    const square_dim = window.innerWidth / 20
-    console.log('square_dim', square_dim)
+    const square_dim_x = window.innerWidth / 20
+    const square_dim_y = square_dim_x + 2 // potential problem later on
     let fromIndex;
     let toIndex;
 
@@ -77,12 +80,13 @@ function Board({ gameState }) {
     const onStart = (e, i) => {
         ++state.activeDrags
         fromIndex = i
-        console.log('fI', fromIndex)
+        console.log('fromIndex', fromIndex)
     };
     const onStop = (e) => {
         --state.activeDrags;
-        const xSquares = getSquares(state.deltaPosition.x, square_dim)
-        const ySquares = getSquares(state.deltaPosition.y, square_dim)
+        const xSquares = getSquares(state.deltaPosition.x, square_dim_x)
+        const ySquares = getSquares(state.deltaPosition.y, square_dim_y)
+        console.log('x, y: ', xSquares, ySquares)
         toIndex = fromIndex + (8 * ySquares) + xSquares
         console.log('toIndex', toIndex)
     };
