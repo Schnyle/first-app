@@ -58,7 +58,7 @@ const getSquares = (posDiff, square_dim) => {
   return squares
 };
 
-function Board({ gameState }) {
+function Board({ gameState, handleMove }) {
 
     const square_dim_x = window.innerWidth / 20
     const square_dim_y = square_dim_x + 2 // potential problem later on
@@ -80,15 +80,16 @@ function Board({ gameState }) {
     const onStart = (e, i) => {
         ++state.activeDrags
         fromIndex = i
-        console.log('fromIndex', fromIndex)
+        // console.log('fromIndex', fromIndex)
     };
     const onStop = (e) => {
         --state.activeDrags;
         const xSquares = getSquares(state.deltaPosition.x, square_dim_x)
         const ySquares = getSquares(state.deltaPosition.y, square_dim_y)
-        console.log('x, y: ', xSquares, ySquares)
+        // console.log('x, y: ', xSquares, ySquares)
         toIndex = fromIndex + (8 * ySquares) + xSquares
-        console.log('toIndex', toIndex)
+        // console.log('toIndex', toIndex)
+        handleMove(fromIndex, toIndex)
     };
 
     const pieces_array = gameState.pieces.split('')

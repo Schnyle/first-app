@@ -30,11 +30,18 @@ function App() {
       .then(data => {setGameState(data[0])})
   }, []);
 
+  function handleMove(fromIndex, toIndex) {
+    console.log(fromIndex, toIndex)
+  };
+
   return (
     <>
       <GlobalStyle />
       <h1>Chess by Kyle</h1>
-      <Board gameState={gameState}/>
+      <Board 
+        gameState={gameState}
+        handleMove={handleMove}
+      />
     </>
   );
 }
