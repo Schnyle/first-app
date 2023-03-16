@@ -1,35 +1,20 @@
 import { createGlobalStyle } from 'styled-components';
 import Draggable from 'react-draggable';
 
-import bbPng from './pieces/bb.png';
-import bhPng from './pieces/bh.png';
-import bkPng from './pieces/bk.png';
-import bpPng from './pieces/bp.png';
-import bqPng from './pieces/bq.png';
-import brPng from './pieces/br.png';
-import wbPng from './pieces/wb.png';
-import whPng from './pieces/wh.png';
-import wkPng from './pieces/wk.png';
-import wpPng from './pieces/wp.png';
-import wqPng from './pieces/wq.png';
-import wrPng from './pieces/wr.png';
-
-const piece_dictionary = {
-    'BB': bbPng,
-    'BH': bhPng,
-    'BK': bkPng,
-    'BP': bpPng,
-    'BQ': bqPng,
-    'BR': brPng,
-    'WB': wbPng,
-    'WH': whPng,
-    'WK': wkPng,
-    'WP': wpPng,
-    'WQ': wqPng,
-    'WR': wrPng, 
-}
+import piece_dictionary from './PiecePngs';
 
 const BoardStyle = createGlobalStyle`
+
+    .board-container {
+        height: 40vw;
+        width: 40vw;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
     .light-square {
         height: 5vw;
@@ -49,44 +34,36 @@ const BoardStyle = createGlobalStyle`
         margin: 0;
     }
 
-    .board-container {
-        display: grid;
-        grid-template-columns: 5vw 5vw 5vw 5vw 5vw 5vw 5vw 5vw ;
-    }
 `
 
 function Board({ gameState }) {
-
     const state = {
         activeDrags: 0
     }
 
     const handleDrag = (e, ui) => {
-        console.log('handleDrag')
         const {x, y} = ui.deltaPosition || {};
         ui.position = {
-          x: x,
-          y: y
+            x: x,
+            y: y
         };
-        console.log(ui.position)
-      };
-
-    const onStart = () => {
-      ++state.activeDrags
-      console.log('onStart')
     };
-    
+    const onStart = () => {
+        ++state.activeDrags
+    };
     const onStop = () => {
-      --state.activeDrags;
-      console.log('onStop');
+        --state.activeDrags;
     };
 
     const pieces_array = gameState.pieces.split('')
     const colors_array = gameState.colors.split('')
+
     if (pieces_array.length == 0 || colors_array.length == 0) {
         return <></>
     };
+
     const boardDivs = [];
+    
     let row = 0;
     for (let i = 0; i < 64; i++) {
         // set color
@@ -111,6 +88,8 @@ function Board({ gameState }) {
               onDrag={handleDrag}
               onStart={onStart}
               onStop={onStop}
+              bounds='.board-container'
+              // offsetParent={document.querySelector('.board-container')}
             >
               <img draggable='false' src={piecePng}/>
             </Draggable>
