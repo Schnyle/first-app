@@ -44,7 +44,24 @@ const BoardStyle = createGlobalStyle`
 
 `
 
+const getSquares = (posDiff, square_dim) => {
+  const posDiffSign = (posDiff > 0 ? 1 : -1)
+  let squares = posDiffSign
+  posDiff = posDiff - (posDiffSign * square_dim / 2)
+  while(Math.abs(posDiff) > square_dim) {
+    squares += (posDiffSign)
+    posDiff -= (posDiffSign * square_dim)
+  };
+  return squares
+};
+
 function Board({ gameState }) {
+
+    const square_dim = window.innerWidth / 20
+    console.log('square_dim', square_dim)
+    let fromIndex;
+    let toIndex;
+
     const state = {
         activeDrags: 0,
         deltaPosition: {x: 0, y: 0}
@@ -57,11 +74,17 @@ function Board({ gameState }) {
           y: y + ui.deltaY
         };
     };
-    const onStart = (e) => {
+    const onStart = (e, i) => {
         ++state.activeDrags
+        fromIndex = i
+        console.log('fI', fromIndex)
     };
     const onStop = (e) => {
         --state.activeDrags;
+        const xSquares = getSquares(state.deltaPosition.x, square_dim)
+        const ySquares = getSquares(state.deltaPosition.y, square_dim)
+        toIndex = fromIndex + (8 * ySquares) + xSquares
+        console.log('toIndex', toIndex)
     };
 
     const pieces_array = gameState.pieces.split('')
@@ -99,7 +122,7 @@ function Board({ gameState }) {
           >
             <Draggable 
               onDrag={handleDrag}
-              onStart={onStart}
+              onStart={(e) => onStart(e, i)}
               onStop={onStop}
               bounds='.board-container'
             >
@@ -108,7 +131,6 @@ function Board({ gameState }) {
             <div 
               id={square_id} 
               className='trans-square' 
-              onMouseMove={(e) => console.log(e.target.id)}
             ></div>
           </div>
         )
@@ -125,6 +147,9 @@ function Board({ gameState }) {
           <div className='board-container'>
             {boardDivs}
           </div>
+          <h2>
+            {state.deltaPosition.x.toFixed(0)}
+          </h2>
         </>
     );
 }
