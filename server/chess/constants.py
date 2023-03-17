@@ -1,0 +1,7 @@
+initial_chess_state = {
+    'pieces': 'RHBQKBHRPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEPPPPPPPPRHBQKBHR',
+    'colors': 'BBBBBBBBBBBBBBBBEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWW',
+    'whites_turn': True,
+    'fromIndex': None,
+    'toIndex': None
+}

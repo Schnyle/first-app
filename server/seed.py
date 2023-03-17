@@ -7,7 +7,9 @@ with app.app_context():
     starting_position = Move(
         pieces = 'RHBQKBHRPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEPPPPPPPPRHBQKBHR',
         colors = 'BBBBBBBBBBBBBBBBEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWW',
-        whites_turn = True
+        whites_turn = True,
+        toIndex = None,
+        fromIndex = None
     )
 
     db.session.add(starting_position)
