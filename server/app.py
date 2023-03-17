@@ -24,8 +24,6 @@ with app.app_context():
     initial_state = Move.query.order_by(Move.id.desc()).first()
     chess = chess.Chess(initial_state)
 
-# print(chess.state.to_dict())
-
 @app.route('/moves', methods=['GET', 'PATCH'])
 def moves():
 
@@ -39,11 +37,13 @@ def moves():
         data = request.get_json()
         fromIndex = data['fromIndex']
         toIndex = data['toIndex']
+
         # check if valid move
         currentState = chess.state_dict.copy()
         newState = chess.move(fromIndex, toIndex)
         print('app.py newState:', newState)
         print('app.py currentState:', currentState)
+
         # if invalid move, do nothing
         if currentState == newState:
             print('app.py: did not update game state')
@@ -53,11 +53,13 @@ def moves():
                 jsonify(currentState),
                 200
             )
+        
         # update current board
         setattr(chess.state, 'fromIndex', fromIndex)
         setattr(chess.state, 'toIndex', toIndex)
         db.session.add(chess.state)
-        # create next board position
+
+        # create and return next board position
         nextState = Move(
             pieces=newState['pieces'],
             colors=newState['colors'],

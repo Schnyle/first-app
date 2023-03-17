@@ -89,7 +89,7 @@ class Rook(Piece):
 
                 if 0 <= new_row <= 7 and 0 <= new_col <= 7:
                     temp_position = cart_to_pos(new_row, new_col)
-                    if self.state_colors[temp_position] == 'EMPTY':
+                    if self.state_colors[temp_position] == 'E':
                         moves.append(temp_position)
                     elif self.state_colors[temp_position] == self.color:
                         loop = False
@@ -134,7 +134,7 @@ class Bishop(Piece):
 
                 if 0 <= new_row <= 7 and 0 <= new_col <= 7:
                     new_position = cart_to_pos(new_row, new_col)
-                    if self.state_colors[new_position] == 'EMPTY':
+                    if self.state_colors[new_position] == 'E':
                         moves.append(new_position)
                     elif self.state_colors[new_position] == self.color:
                         loop = False

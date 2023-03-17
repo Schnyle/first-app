@@ -34,8 +34,37 @@ class Chess:
             if selected_piece.check_move(toIndex):
                 print('chess.py: valid move')
                 update_state()
-                return self.state_dict
-            else:
-                print('chess.py: invalid move')
-                return self.state_dict
+            return self.state_dict
+
+            
+        if piece_name == 'H':
+            selected_piece = piece.Knight(piece_color, fromIndex, self.state_dict['colors'])
+            if selected_piece.check_move(toIndex):
+                update_state()
+            return self.state_dict
+        
+        if piece_name == 'B':
+            selected_piece = piece.Bishop(piece_color, fromIndex, self.state_dict['colors'])
+            if selected_piece.check_move(toIndex):
+                update_state()
+            return self.state_dict
+
+        if piece_name == 'R':
+            selected_piece = piece.Rook(piece_color, fromIndex, self.state_dict['colors'])
+            if selected_piece.check_move(toIndex):
+                update_state()
+            return self.state_dict
+    
+        if piece_name == 'Q':
+            selected_piece = piece.Queen(piece_color, fromIndex, self.state_dict['colors'])
+            if selected_piece.check_move(toIndex):
+                update_state()
+            return self.state_dict
+        
+        if piece_name == 'K':
+            selected_piece = piece.King(piece_color, fromIndex, self.state_dict['colors'])
+            if selected_piece.check_move(toIndex):
+                update_state()
+            return self.state_dict
+
                 
