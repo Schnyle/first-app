@@ -47,6 +47,8 @@ def moves():
         # if invalid move, do nothing
         if currentState == newState:
             print('app.py: did not update game state')
+            currentState['fromIndex'] = fromIndex
+            currentState['toIndex'] = toIndex
             return make_response(
                 jsonify(currentState),
                 200
