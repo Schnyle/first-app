@@ -41,14 +41,9 @@ def moves():
         # check if valid move
         currentState = chess.state_dict.copy()
         newState = chess.move(fromIndex, toIndex)
-        print('app.py newState:', newState)
-        print('app.py currentState:', currentState)
 
         # if invalid move, do nothing
         if currentState == newState:
-            print('app.py: did not update game state')
-            currentState['fromIndex'] = fromIndex
-            currentState['toIndex'] = toIndex
             return make_response(
                 jsonify(currentState),
                 200
@@ -69,8 +64,6 @@ def moves():
         )
         db.session.add(nextState)
         db.session.commit()
-        print('app.py: updated game state')
-        print(nextState)
         return make_response(
             jsonify(nextState.to_dict()),
             201

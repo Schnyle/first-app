@@ -11,7 +11,6 @@ class Chess:
     def move(self, fromIndex, toIndex):
         piece_name = self.state_dict['pieces'][fromIndex]
         piece_color = self.state_dict['colors'][fromIndex]
-        print(piece_color, piece_name)
         
         def update_state():
             self.state_dict['pieces'] = update_str(self.state_dict['pieces'], 'E', fromIndex)
@@ -26,13 +25,11 @@ class Chess:
         this_turns_color = 'W' if self.state_dict['whites_turn'] else 'B'
         this_turns_positions = [i for i, color in enumerate(self.state_dict['colors']) if color == this_turns_color]
         if fromIndex not in this_turns_positions:
-            print('chess.py: not your piece')
             return self.state_dict
         
         if piece_name == 'P':
             selected_piece = piece.Pawn(piece_color, fromIndex, self.state_dict['colors'])
             if selected_piece.check_move(toIndex):
-                print('chess.py: valid move')
                 update_state()
             return self.state_dict
 

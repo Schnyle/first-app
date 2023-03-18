@@ -21,17 +21,20 @@ function App() {
   const [gameState, setGameState] = useState({
     pieces: '',
     colors: '',
-    whites_turn: true
+    whites_turn: true,
+    toIndex: null,
+    fromIndex: null
   })
 
   useEffect(() => {
     fetch('http://127.0.0.1:5555/moves')
       .then(r => r.json())
-      .then(data => {setGameState(data[0])})
+      .then(data => {setGameState(data.slice(-1)[0])})
   }, []);
 
-  function handleMove(fromIndex, toIndex) {
-    console.log(fromIndex, toIndex);
+  const [validMove, setValidMove] = useState(false);
+
+  async function handleMove(fromIndex, toIndex) {
     const configObj = {
       method: "PATCH",
       headers: {
@@ -40,8 +43,23 @@ function App() {
       },
       body: JSON.stringify({fromIndex, toIndex,}),
     };
-    fetch('http://127.0.0.1:5555/moves', configObj)
-      .then()
+    await fetch('http://127.0.0.1:5555/moves', configObj)
+      .then(r => r.json())
+      .then(newGameState => {
+        // do this better jeez
+        const gameStateNoId = {...gameState}
+        delete gameStateNoId.id
+        delete gameStateNoId.fromIndex
+        delete gameStateNoId.toIndex
+        const newGameStateNoId = {...newGameState}
+        delete newGameStateNoId.id
+        delete newGameStateNoId.fromIndex
+        delete newGameStateNoId.toIndex
+        setGameState(newGameState)
+        setValidMove(!(JSON.stringify(gameStateNoId) == JSON.stringify(newGameStateNoId)));
+      })
+      .then(() => {return validMove})
+      // console.log('App.js', validMove)
   };
 
   return (
@@ -51,6 +69,7 @@ function App() {
       <Board 
         gameState={gameState}
         handleMove={handleMove}
+        validMove={validMove}
       />
     </>
   );

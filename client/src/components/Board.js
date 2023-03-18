@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import Draggable from 'react-draggable';
 
@@ -58,7 +59,9 @@ const getSquares = (posDiff, square_dim) => {
   return squares
 };
 
-function Board({ gameState, handleMove }) {
+function Board({ gameState, handleMove, validMove }) {
+
+    console.log('Board.js', validMove)
 
     const square_dim_x = window.innerWidth / 20
     const square_dim_y = square_dim_x + 2 // potential problem later on
@@ -67,7 +70,7 @@ function Board({ gameState, handleMove }) {
 
     const state = {
         activeDrags: 0,
-        deltaPosition: {x: 0, y: 0}
+        deltaPosition: {x: 0, y: 0},
     }
 
     const handleDrag = (e, ui) => {
@@ -80,16 +83,21 @@ function Board({ gameState, handleMove }) {
     const onStart = (e, i) => {
         ++state.activeDrags
         fromIndex = i
-        // console.log('fromIndex', fromIndex)
     };
-    const onStop = (e) => {
+    const onStop = (e, dragElement) => {
         --state.activeDrags;
-        const xSquares = getSquares(state.deltaPosition.x, square_dim_x)
-        const ySquares = getSquares(state.deltaPosition.y, square_dim_y)
-        // console.log('x, y: ', xSquares, ySquares)
-        toIndex = fromIndex + (8 * ySquares) + xSquares
-        // console.log('toIndex', toIndex)
+        const xSquares = getSquares(state.deltaPosition.x, square_dim_x);
+        const ySquares = getSquares(state.deltaPosition.y, square_dim_y);
+        toIndex = fromIndex + (8 * ySquares) + xSquares;
+
         handleMove(fromIndex, toIndex)
+        
+        if (!validMove) {
+          state.deltaPosition = {x:0, y:0}
+        } else {
+          state.deltaPosition = {x: 1000, y: 1000}
+        };
+        console.log('dP', state.deltaPosition)
     };
 
     const pieces_array = gameState.pieces.split('')
@@ -130,6 +138,7 @@ function Board({ gameState, handleMove }) {
               onStart={(e) => onStart(e, i)}
               onStop={onStop}
               bounds='.board-container'
+              position={{x: state.deltaPosition.x, y: state.deltaPosition.y}}
             >
               <img draggable='false' src={piecePng} />
             </Draggable>
@@ -152,9 +161,6 @@ function Board({ gameState, handleMove }) {
           <div className='board-container'>
             {boardDivs}
           </div>
-          <h2>
-            {state.deltaPosition.x.toFixed(0)}
-          </h2>
         </>
     );
 }
