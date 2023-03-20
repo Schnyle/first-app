@@ -59,11 +59,9 @@ const getSquares = (posDiff, square_dim) => {
   return squares
 };
 
-function Board({ gameState, handleMove, validMove }) {
+function Board({ gameState, handleMove }) {
 
-    const [validMoveState, setValidMoveState] = useState(validMove);
-
-    // console.log('Board.js', validMove)
+    const [controlledPositions, setControlledPositions] = useState(new Array(64).fill({ x: 0, y: 0 }));
 
     const square_dim_x = window.innerWidth / 20
     const square_dim_y = square_dim_x + 2 // potential problem later on
@@ -71,38 +69,37 @@ function Board({ gameState, handleMove, validMove }) {
     let toIndex;
 
     const state = {
-        activeDrags: 0,
-        deltaPosition: {x: 0, y: 0},
-        controlledPosition: {x: 0, y:0}
+        activeDrags: 0
     }
 
-    const handleDrag = (e, ui) => {
-        const {x, y} = state.deltaPosition;
-        state.deltaPosition = {
-          x: x + ui.deltaX,
-          y: y + ui.deltaY
-        };
-        state.controlledPosition = state.deltaPosition;
+    const handleDrag = (e, ui, index) => {
+      const { x, y } = controlledPositions[index];
+      setControlledPositions((positions) => {
+        const newPositions = [...positions];
+        newPositions[index] = { x: x + ui.deltaX, y: y + ui.deltaY };
+        return newPositions;
+      });
     };
+
     const onStart = (e, i) => {
         ++state.activeDrags
         fromIndex = i
     };
-    const onStop = async (e, dragElement) => {
+
+    const onStop = async (e, dragElement, i) => {
         --state.activeDrags;
-        const xSquares = getSquares(state.deltaPosition.x, square_dim_x);
-        const ySquares = getSquares(state.deltaPosition.y, square_dim_y);
+        const xSquares = getSquares(controlledPositions[i].x, square_dim_x);
+        const ySquares = getSquares(controlledPositions[i].y, square_dim_y);
+        fromIndex = i;
         toIndex = fromIndex + (8 * ySquares) + xSquares;
 
-
         const validMove = await handleMove(fromIndex, toIndex);
-        setValidMoveState(validMove);
-
         if (!validMove) {
-          console.log('invalid move')
-          state.controlledPosition = {x: 0, y:0};
-        } else {
-          console.log('valid move')
+          setControlledPositions((positions) => {
+            const newPositions = [...positions];
+            newPositions[i] = { x: 0, y: 0 };
+            return newPositions;
+          })
         };
     };
 
@@ -110,7 +107,7 @@ function Board({ gameState, handleMove, validMove }) {
     const colors_array = gameState.colors.split('')
 
     if (pieces_array.length == 0 || colors_array.length == 0) {
-        return <></>
+        return <>Chess board data not recieved.</>
     };
 
     const boardDivs = [];
@@ -140,11 +137,11 @@ function Board({ gameState, handleMove, validMove }) {
             key={i}
           >
             <Draggable 
-              onDrag={handleDrag}
+              onDrag={(e, ui) => handleDrag(e, ui, i)}
               onStart={(e) => onStart(e, i)}
-              onStop={onStop}
+              onStop={(e, dragElement) => onStop(e, dragElement, i)}
               bounds='.board-container'
-              position={state.controlledPosition}
+              position={controlledPositions[i]}
             >
               <img draggable='false' src={piecePng} />
             </Draggable>

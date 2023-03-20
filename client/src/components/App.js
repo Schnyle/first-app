@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import Board from './Board.js';
 import { createGlobalStyle } from 'styled-components';
 
-import test from './test.js';
-
 const GlobalStyle = createGlobalStyle`
     :root {
       --black: black;
@@ -34,8 +32,6 @@ function App() {
       .then(data => {setGameState(data.slice(-1)[0])})
   }, []);
 
-  const [validMove, setValidMove] = useState(false);
-
   async function handleMove(fromIndex, toIndex) {
     const configObj = {
       method: "PATCH",
@@ -45,8 +41,10 @@ function App() {
       },
       body: JSON.stringify({fromIndex, toIndex,}),
     };
+    
     const newGameState = await fetch('http://127.0.0.1:5555/moves', configObj)
       .then(r => r.json());
+    setGameState(newGameState)
 
     const gameStateNoId = {...gameState}
     delete gameStateNoId.id
@@ -58,10 +56,7 @@ function App() {
     delete newGameStateNoId.fromIndex
     delete newGameStateNoId.toIndex
 
-    setGameState(newGameState)
     const validMove = !(JSON.stringify(gameStateNoId) == JSON.stringify(newGameStateNoId));
-    setValidMove(validMove);
-    console.log('App:', validMove)
     return validMove
   };
 
@@ -72,7 +67,6 @@ function App() {
       <Board 
         gameState={gameState}
         handleMove={handleMove}
-        validMove={validMove}
       />
     </>
   );
