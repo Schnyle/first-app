@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Board from './Board.js';
 import { createGlobalStyle } from 'styled-components';
 
+// import test from './test'
+
 const GlobalStyle = createGlobalStyle`
     :root {
       --black: black;
@@ -41,22 +43,15 @@ function App() {
       },
       body: JSON.stringify({fromIndex, toIndex,}),
     };
-    
+
     const newGameState = await fetch('http://127.0.0.1:5555/moves', configObj)
       .then(r => r.json());
     setGameState(newGameState)
 
-    const gameStateNoId = {...gameState}
-    delete gameStateNoId.id
-    delete gameStateNoId.fromIndex
-    delete gameStateNoId.toIndex
+    const {pieces} = gameState;
+    const {pieces: newPieces} = newGameState;
 
-    const newGameStateNoId = {...newGameState}
-    delete newGameStateNoId.id
-    delete newGameStateNoId.fromIndex
-    delete newGameStateNoId.toIndex
-
-    const validMove = !(JSON.stringify(gameStateNoId) == JSON.stringify(newGameStateNoId));
+    const validMove = !(pieces == newPieces);
     return validMove
   };
 
