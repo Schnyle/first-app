@@ -21,6 +21,29 @@ class Chess:
             self.state_dict['fromIndex'] = fromIndex
             self.state_dict['toIndex'] = toIndex
 
+            # castling
+            if piece_name == 'K':
+                print(piece_name)
+                if piece_color == 'W':
+                    print(piece_color)
+                    self.state_dict['white_can_castle_short'] = False
+                    self.state_dict['white_can_castle_long'] = False
+                elif piece_color == 'B':
+                    print(piece_color)
+                    self.state_dict['black_can_castle_short'] = False
+                    self.state_dict['black_can_castle_long'] = False        
+
+            if piece_name == 'R':
+                if fromIndex == 56:
+                    self.state_dict['white_can_castle_long'] = False
+                elif fromIndex == 63:
+                    self.state_dict['white_can_castle_short'] = False
+                elif fromIndex == 0:
+                    self.state_dict['black_can_castle_long'] = False
+                elif fromIndex == 7:
+                    self.state_dict['black_can_castle_short'] = False
+
+
         # check user selected their own piece
         this_turns_color = 'W' if self.state_dict['whites_turn'] else 'B'
         this_turns_positions = [i for i, color in enumerate(self.state_dict['colors']) if color == this_turns_color]

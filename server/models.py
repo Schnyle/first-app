@@ -6,6 +6,8 @@ db = SQLAlchemy()
 class Move(db.Model, SerializerMixin):
     __tablename__ = 'moves'
 
+    serialize_rules = ()
+
     id = db.Column(db.Integer, primary_key=True)
     pieces = db.Column(db.String)
     colors = db.Column(db.String)

@@ -68,10 +68,6 @@ function Board({ gameState, handleMove }) {
     let fromIndex;
     let toIndex;
 
-    const state = {
-        activeDrags: 0
-    }
-
     const handleDrag = (e, ui, index) => {
       const { x, y } = controlledPositions[index];
       setControlledPositions((positions) => {
@@ -81,13 +77,7 @@ function Board({ gameState, handleMove }) {
       });
     };
 
-    const onStart = (e, i) => {
-        ++state.activeDrags
-        fromIndex = i
-    };
-
     const onStop = async (e, dragElement, i) => {
-        --state.activeDrags;
         const xSquares = getSquares(controlledPositions[i].x, square_dim_x);
         const ySquares = getSquares(controlledPositions[i].y, square_dim_y);
         fromIndex = i;
@@ -138,7 +128,6 @@ function Board({ gameState, handleMove }) {
           >
             <Draggable 
               onDrag={(e, ui) => handleDrag(e, ui, i)}
-              onStart={(e) => onStart(e, i)}
               onStop={(e, dragElement) => onStop(e, dragElement, i)}
               bounds='.board-container'
               position={controlledPositions[i]}

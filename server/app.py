@@ -32,6 +32,7 @@ def moves():
     if request.method == 'PATCH':
         chessState = Move.query.order_by(Move.id.desc()).first()
         chess = Chess(chessState)
+
         data = request.get_json()
         fromIndex = data['fromIndex']
         toIndex = data['toIndex']
@@ -48,7 +49,6 @@ def moves():
             )
         
         # update current board
-        print('setattr')
         setattr(chess.state, 'fromIndex', fromIndex)
         setattr(chess.state, 'toIndex', toIndex)
         db.session.add(chess.state)
@@ -59,7 +59,11 @@ def moves():
             colors=newState['colors'],
             whites_turn=newState['whites_turn'],
             fromIndex=None,
-            toIndex=None
+            toIndex=None,
+            white_can_castle_short=newState['white_can_castle_short'],
+            white_can_castle_long=newState['white_can_castle_long'],
+            black_can_castle_short=newState['black_can_castle_short'],
+            black_can_castle_long=newState['black_can_castle_long'],
         )
         db.session.add(nextState)
         db.session.commit()
