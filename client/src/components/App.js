@@ -34,7 +34,9 @@ function App() {
     toIndex: null,
     fromIndex: null
   })
-  const [moveData, setMoveData] = useState([{index: 0, values: {toIndex: -1, piece: '', color: ''}}]);
+  const [moveData, setMoveData] = useState([
+    {index: 0, values: {toIndex: -1, piece: '', color: '', capture: false, castle: ''}}
+  ]);
 
   useEffect(() => {
     fetch('http://127.0.0.1:5555/moves')
@@ -63,7 +65,8 @@ function App() {
       const values = {
         toIndex: toIndex, 
         piece: newGameState['pieces'][toIndex],
-        color: newGameState['colors'][toIndex]
+        color: newGameState['colors'][toIndex],
+        capture: gameState['pieces'][toIndex] != 'E'
       };
       return [...moves, {index, values} ]
     }); 
