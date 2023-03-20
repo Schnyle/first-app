@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import Board from './Board.js';
 import { createGlobalStyle } from 'styled-components';
 
+import Board from './Board.js';
+import Moves from './Moves.js';
 // import test from './test'
 
 const GlobalStyle = createGlobalStyle`
@@ -10,11 +11,17 @@ const GlobalStyle = createGlobalStyle`
       --white: #bcbbbf;
       --purple: #270973;
       --dark-grey: #111;
+      --light-grey: #383838;
     }
 
     body {
       background-color: var(--dark-grey);
       color: var(--white);
+    }
+
+    .game-container {
+      display: inline-block;
+      width: 100vw;
     }
 `
 
@@ -27,6 +34,7 @@ function App() {
     toIndex: null,
     fromIndex: null
   })
+  const [moveData, setMoveData] = useState([{index: 0, values: {to: -1, piece: '', color: ''}}]);
 
   useEffect(() => {
     fetch('http://127.0.0.1:5555/moves')
@@ -48,10 +56,18 @@ function App() {
       .then(r => r.json());
     setGameState(newGameState)
 
-    const {pieces} = gameState;
-    const {pieces: newPieces} = newGameState;
+    const validMove = !(gameState.pieces == newGameState.pieces);
+    
+    if (validMove) setMoveData(moves => {
+      const index = moves.slice(-1)[0]['index'] + 1
+      const values = {
+        to: toIndex, 
+        piece: newGameState['pieces'][toIndex],
+        color: newGameState['colors'][toIndex]
+      };
+      return [...moves, {index, values} ]
+    }); 
 
-    const validMove = !(pieces == newPieces);
     return validMove
   };
 
@@ -59,10 +75,13 @@ function App() {
     <>
       <GlobalStyle />
       <h1>Chess by Kyle</h1>
-      <Board 
-        gameState={gameState}
-        handleMove={handleMove}
-      />
+      <div className='game-container'>
+        <Board 
+          gameState={gameState}
+          handleMove={handleMove}
+        />
+        <Moves moves={moveData}/>
+      </div>
     </>
   );
 }
