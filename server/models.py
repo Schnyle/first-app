@@ -12,3 +12,7 @@ class Move(db.Model, SerializerMixin):
     whites_turn = db.Column(db.Boolean)
     fromIndex = db.Column(db.Integer)
     toIndex = db.Column(db.Integer)
+    white_can_castle_long = db.Column(db.Boolean)
+    white_can_castle_short = db.Column(db.Boolean)
+    black_can_castle_long = db.Column(db.Boolean)
+    black_can_castle_short = db.Column(db.Boolean)

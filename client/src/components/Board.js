@@ -88,28 +88,22 @@ function Board({ gameState, handleMove, validMove }) {
         ++state.activeDrags
         fromIndex = i
     };
-    const onStop = (e, dragElement) => {
+    const onStop = async (e, dragElement) => {
         --state.activeDrags;
         const xSquares = getSquares(state.deltaPosition.x, square_dim_x);
         const ySquares = getSquares(state.deltaPosition.y, square_dim_y);
         toIndex = fromIndex + (8 * ySquares) + xSquares;
 
-      async function wtf() {
-        validMove = await handleMove(fromIndex, toIndex);
-        // console.log('here', validMove.resolve(1))
-        // console.log(validMove)
+
+        const validMove = await handleMove(fromIndex, toIndex);
         setValidMoveState(validMove);
+
         if (!validMove) {
-          // console.log('invalid move')
+          console.log('invalid move')
           state.controlledPosition = {x: 0, y:0};
         } else {
-          // console.log('valid smove')
+          console.log('valid move')
         };
-        // console.log('dP', state.deltaPosition)
-      }
-      wtf()
-
-        
     };
 
     const pieces_array = gameState.pieces.split('')
