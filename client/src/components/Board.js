@@ -58,37 +58,48 @@ const getSquares = (posDiff, square_dim) => {
   };
   return squares
 };
+ 
+function initialPositions() {
+  const result = {};
+  for (let i = 0; i < 64; i++) {
+    result[`piece${i}`] = { x: 0, y : 0 };
+  };
+  return result;
+}
 
 function Board({ gameState, handleMove }) {
 
-    const [controlledPositions, setControlledPositions] = useState(new Array(64).fill({ x: 0, y: 0 }));
+    const [positions, setPositions] = useState(initialPositions());
 
     const square_dim_x = window.innerWidth / 20
     const square_dim_y = square_dim_x + 2 // potential problem later on
-    let fromIndex;
-    let toIndex;
 
-    const handleDrag = (e, ui, index) => {
-      const { x, y } = controlledPositions[index];
-      setControlledPositions((positions) => {
-        const newPositions = [...positions];
-        newPositions[index] = { x: x + ui.deltaX, y: y + ui.deltaY };
-        return newPositions;
+    const handleDrag = (e, ui, id) => {
+      const { x, y } = positions[id];
+      setPositions((positions) => {
+        const newPositions = { ...positions };
+        newPositions[id] = { x: x + ui.deltaX, y: y + ui.deltaY };
+        return newPositions
       });
     };
 
-    const onStop = async (e, dragElement, i) => {
-        const xSquares = getSquares(controlledPositions[i].x, square_dim_x);
-        const ySquares = getSquares(controlledPositions[i].y, square_dim_y);
-        fromIndex = i;
-        toIndex = fromIndex + (8 * ySquares) + xSquares;
+    const onStart = () => {
+      setPositions(initialPositions());
+    };
+
+    const onStop = async (e, dragElement, id, i) => {
+        const xSquares = getSquares(positions[id].x, square_dim_x);
+        const ySquares = getSquares(positions[id].y, square_dim_y);
+
+        let fromIndex = i;
+        let toIndex = fromIndex + (8 * ySquares) + xSquares;
 
         const validMove = await handleMove(fromIndex, toIndex);
         if (!validMove) {
-          setControlledPositions((positions) => {
-            const newPositions = [...positions];
-            newPositions[i] = { x: 0, y: 0 };
-            return newPositions;
+          setPositions((positions) => {
+            const newPositions = { ...positions };
+            newPositions[id] = { x: 0, y: 0 };
+            return newPositions
           })
         };
     };
@@ -120,6 +131,7 @@ function Board({ gameState, handleMove }) {
             piecePng = piece_dictionary[`${color}${piece}`]
         };
 
+        const id = `piece${i}`;
         const square_id = `square${i}`;
         boardDivs.push(
           <div 
@@ -127,10 +139,12 @@ function Board({ gameState, handleMove }) {
             key={i}
           >
             <Draggable 
-              onDrag={(e, ui) => handleDrag(e, ui, i)}
-              onStop={(e, dragElement) => onStop(e, dragElement, i)}
+              id={id}
+              onStart={onStart}
+              onDrag={(e, ui) => handleDrag(e, ui, id)}
+              onStop={(e, dragElement) => onStop(e, dragElement, id, i)}
               bounds='.board-container'
-              position={controlledPositions[i]}
+              position={positions[id]}
             >
               <img draggable='false' src={piecePng} />
             </Draggable>
@@ -144,7 +158,6 @@ function Board({ gameState, handleMove }) {
         if ((i + 1) % 8 == 0) {
             row += 1
         };
-
     }
 
     return (
