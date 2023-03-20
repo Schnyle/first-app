@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import Board from './Board';
+import Board from './Board.js';
 import { createGlobalStyle } from 'styled-components';
+
+// import test from './test.js';
 
 const GlobalStyle = createGlobalStyle`
     :root {
@@ -34,7 +36,7 @@ function App() {
 
   const [validMove, setValidMove] = useState(false);
 
-  async function handleMove(fromIndex, toIndex) {
+  function handleMove(fromIndex, toIndex) {
     const configObj = {
       method: "PATCH",
       headers: {
@@ -43,7 +45,7 @@ function App() {
       },
       body: JSON.stringify({fromIndex, toIndex,}),
     };
-    await fetch('http://127.0.0.1:5555/moves', configObj)
+    fetch('http://127.0.0.1:5555/moves', configObj)
       .then(r => r.json())
       .then(newGameState => {
         // do this better jeez
@@ -58,9 +60,38 @@ function App() {
         setGameState(newGameState)
         setValidMove(!(JSON.stringify(gameStateNoId) == JSON.stringify(newGameStateNoId)));
       })
-      .then(() => {return validMove})
+      return validMove
+      // .then(() => {return validMove})
       // console.log('App.js', validMove)
   };
+
+  // async function handleMove(fromIndex, toIndex) {
+  //   const configObj = {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Accept": "application/json",
+  //     },
+  //     body: JSON.stringify({fromIndex, toIndex,}),
+  //   };
+  //   await fetch('http://127.0.0.1:5555/moves', configObj)
+  //     .then(r => r.json())
+  //     .then(newGameState => {
+  //       // do this better jeez
+  //       const gameStateNoId = {...gameState}
+  //       delete gameStateNoId.id
+  //       delete gameStateNoId.fromIndex
+  //       delete gameStateNoId.toIndex
+  //       const newGameStateNoId = {...newGameState}
+  //       delete newGameStateNoId.id
+  //       delete newGameStateNoId.fromIndex
+  //       delete newGameStateNoId.toIndex
+  //       setGameState(newGameState)
+  //       setValidMove(!(JSON.stringify(gameStateNoId) == JSON.stringify(newGameStateNoId)));
+  //     })
+  //     .then(() => {return validMove})
+  //     // console.log('App.js', validMove)
+  // };
 
   return (
     <>

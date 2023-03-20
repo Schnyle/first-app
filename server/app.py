@@ -7,7 +7,7 @@ from flask_restful import Api, Resource
 from flask_cors import CORS
 
 from models import db, Move
-import chess
+from chess import Chess
 
 app = Flask(__name__)
 CORS(app)
@@ -20,10 +20,6 @@ db.init_app(app)
 
 api = Api(app)
 
-with app.app_context():
-    initial_state = Move.query.order_by(Move.id.desc()).first()
-    chess = chess.Chess(initial_state)
-
 @app.route('/moves', methods=['GET', 'PATCH'])
 def moves():
 
@@ -34,6 +30,8 @@ def moves():
         )
     
     if request.method == 'PATCH':
+        chessState = Move.query.order_by(Move.id.desc()).first()
+        chess = Chess(chessState)
         data = request.get_json()
         fromIndex = data['fromIndex']
         toIndex = data['toIndex']
@@ -50,6 +48,7 @@ def moves():
             )
         
         # update current board
+        print('setattr')
         setattr(chess.state, 'fromIndex', fromIndex)
         setattr(chess.state, 'toIndex', toIndex)
         db.session.add(chess.state)

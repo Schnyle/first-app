@@ -61,7 +61,9 @@ const getSquares = (posDiff, square_dim) => {
 
 function Board({ gameState, handleMove, validMove }) {
 
-    console.log('Board.js', validMove)
+    const [validMoveState, setValidMoveState] = useState(validMove);
+
+    // console.log('Board.js', validMove)
 
     const square_dim_x = window.innerWidth / 20
     const square_dim_y = square_dim_x + 2 // potential problem later on
@@ -71,6 +73,7 @@ function Board({ gameState, handleMove, validMove }) {
     const state = {
         activeDrags: 0,
         deltaPosition: {x: 0, y: 0},
+        controlledPosition: {x: 0, y:0}
     }
 
     const handleDrag = (e, ui) => {
@@ -79,6 +82,7 @@ function Board({ gameState, handleMove, validMove }) {
           x: x + ui.deltaX,
           y: y + ui.deltaY
         };
+        state.controlledPosition = state.deltaPosition;
     };
     const onStart = (e, i) => {
         ++state.activeDrags
@@ -90,14 +94,22 @@ function Board({ gameState, handleMove, validMove }) {
         const ySquares = getSquares(state.deltaPosition.y, square_dim_y);
         toIndex = fromIndex + (8 * ySquares) + xSquares;
 
-        handleMove(fromIndex, toIndex)
-        
+      async function wtf() {
+        validMove = await handleMove(fromIndex, toIndex);
+        // console.log('here', validMove.resolve(1))
+        // console.log(validMove)
+        setValidMoveState(validMove);
         if (!validMove) {
-          state.deltaPosition = {x:0, y:0}
+          // console.log('invalid move')
+          state.controlledPosition = {x: 0, y:0};
         } else {
-          state.deltaPosition = {x: 1000, y: 1000}
+          // console.log('valid smove')
         };
-        console.log('dP', state.deltaPosition)
+        // console.log('dP', state.deltaPosition)
+      }
+      wtf()
+
+        
     };
 
     const pieces_array = gameState.pieces.split('')
@@ -138,7 +150,7 @@ function Board({ gameState, handleMove, validMove }) {
               onStart={(e) => onStart(e, i)}
               onStop={onStop}
               bounds='.board-container'
-              position={{x: state.deltaPosition.x, y: state.deltaPosition.y}}
+              position={state.controlledPosition}
             >
               <img draggable='false' src={piecePng} />
             </Draggable>
