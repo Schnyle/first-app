@@ -7,10 +7,11 @@ def cart_to_pos(row, col):
     return (8 * row) + col
 
 class Piece():
-    def __init__(self, color, position, state_colors):
+    def __init__(self, color, position, state):
         self.color = color
         self.position = position
-        self.state_colors = state_colors
+        self.state = state
+        self.state_colors = state['colors']
 
     def get_moves():    # place holder
         pass
@@ -27,8 +28,8 @@ class Piece():
         return True
 
 class King(Piece):
-    def __init__(self, color, position, state_colors):
-        super().__init__(color, position, state_colors)
+    def __init__(self, color, position, state):
+        super().__init__(color, position, state)
 
     def get_moves(self):
         [row, col] = pos_to_cart(self.position)
@@ -51,20 +52,35 @@ class King(Piece):
         check_move(1, -1)
         check_move(-1, -1)
 
+        # castling
+        short_castle_space = [self.state_colors[61], self.state_colors[62]] == ['E', 'E']
+        long_castle_sapce = [self.state_colors[59], self.state_colors[58], self.state_colors[57]] == ['E', 'E', 'E']
+        if self.state['white_can_castle_short'] and self.position == 60 and short_castle_space:
+            moves.append(62) 
+        if self.state['white_can_castle_long'] and self.position == 60 and long_castle_sapce:
+            moves.append(58) 
+
+        short_castle_space = [self.state_colors[5], self.state_colors[6]] == ['E', 'E']
+        long_castle_sapce = [self.state_colors[3], self.state_colors[2], self.state_colors[1]] == ['E', 'E', 'E']
+        if self.state['black_can_castle_short'] and self.position == 4 and short_castle_space:
+            moves.append(6) 
+        if self.state['black_can_castle_long'] and self.position == 4 and long_castle_sapce:
+            moves.append(2) 
+
         return moves
         
 
 class Queen(Piece):
-    def __init__(self, color, position, state_colors):
-        super().__init__(color, position, state_colors)
+    def __init__(self, color, position, state):
+        super().__init__(color, position, state)
 
     def get_moves(self):
         moves = Rook.get_moves(self) + Bishop.get_moves(self)
         return moves
 
 class Rook(Piece):
-    def __init__(self, color, position, state_colors):
-        super().__init__(color, position, state_colors)
+    def __init__(self, color, position, state):
+        super().__init__(color, position, state)
 
     def get_moves(self):
         [row, col] = pos_to_cart(self.position)
@@ -108,8 +124,8 @@ class Rook(Piece):
         return moves
 
 class Bishop(Piece):
-    def __init__(self, color, position, state_colors):
-        super().__init__(color, position, state_colors)
+    def __init__(self, color, position, state):
+        super().__init__(color, position, state)
 
     def get_moves(self):
         [row, col] = pos_to_cart(self.position)
@@ -153,8 +169,8 @@ class Bishop(Piece):
         return moves
 
 class Knight(Piece):
-    def __init__(self, color, position, state_colors):
-        super().__init__(color, position, state_colors)
+    def __init__(self, color, position, state):
+        super().__init__(color, position, state)
 
     def get_moves(self):
         [row, col] = pos_to_cart(self.position)
@@ -180,8 +196,8 @@ class Knight(Piece):
         return moves
 
 class Pawn(Piece):
-    def __init__(self, color, position, state_colors):
-        super().__init__(color, position, state_colors)
+    def __init__(self, color, position, state):
+        super().__init__(color, position, state)
         self.moved = True
         if (7 < position < 16) and self.color == 'B':
             self.moved = False
