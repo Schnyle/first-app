@@ -34,8 +34,19 @@ function App() {
     toIndex: null,
     fromIndex: null
   })
+
   const [moveData, setMoveData] = useState([
-    {index: 0, values: {toIndex: -1, piece: '', color: '', capture: false, castle: ''}}
+    {
+      index: 0, 
+      values: {
+        toIndex: -1,
+        fromIndex: -1,  
+        piece: '', 
+        color: '', 
+        capture: false, 
+        castle: ''
+      }
+    }
   ]);
 
   useEffect(() => {
@@ -75,6 +86,7 @@ function App() {
 
       const values = {
         toIndex: toIndex, 
+        fromIndex: fromIndex,
         piece: newGameState['pieces'][toIndex],
         color: newGameState['colors'][toIndex],
         capture: gameState['pieces'][toIndex] != 'E',
