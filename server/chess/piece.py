@@ -18,13 +18,8 @@ class Piece():
 
     def check_move(self, target):
         moves = self.get_moves()
-        # check piece can reach target
         if not target in moves:
-            print('This piece cannot move to that square.')
             return False
-        
-        # more logic
-        # check if move creates check on own king
         return True
 
 class King(Piece):

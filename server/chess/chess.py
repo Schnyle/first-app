@@ -11,6 +11,18 @@ class Chess:
     def move(self, fromIndex, toIndex):
         piece_name = self.state_dict['pieces'][fromIndex]
         piece_color = self.state_dict['colors'][fromIndex]
+
+        # check for king in check
+        king_piece_indexes = [index for (index, char) in enumerate(self.state_dict['pieces']) if char == 'K']
+        if self.state_dict['colors'][king_piece_indexes[0]] == piece_color:
+            king_index = king_piece_indexes[0]
+        else:
+            king_index = king_piece_indexes[1]    
+        
+        if piece_name == 'K':
+            king_index = toIndex
+
+        print(king_index)
         
         def update_state():
             self.state_dict['pieces'] = update_str(self.state_dict['pieces'], 'E', fromIndex)
@@ -64,43 +76,50 @@ class Chess:
                 self.state_dict['pieces'] = update_str(self.state_dict['pieces'], 'R', 3)
                 self.state_dict['colors'] = update_str(self.state_dict['colors'], 'B', 3)
 
+   
+
         # check user selected their own piece
         this_turns_color = 'W' if self.state_dict['whites_turn'] else 'B'
         this_turns_positions = [i for i, color in enumerate(self.state_dict['colors']) if color == this_turns_color]
         if fromIndex not in this_turns_positions:
             return self.state_dict
         
+        # pawn
         if piece_name == 'P':
             selected_piece = piece.Pawn(piece_color, fromIndex, self.state_dict)
             if selected_piece.check_move(toIndex):
                 update_state()
             return self.state_dict
 
-            
+        # knight (horse)
         if piece_name == 'H':
             selected_piece = piece.Knight(piece_color, fromIndex, self.state_dict)
             if selected_piece.check_move(toIndex):
                 update_state()
             return self.state_dict
         
+        # bishop
         if piece_name == 'B':
             selected_piece = piece.Bishop(piece_color, fromIndex, self.state_dict)
             if selected_piece.check_move(toIndex):
                 update_state()
             return self.state_dict
 
+        # rook
         if piece_name == 'R':
             selected_piece = piece.Rook(piece_color, fromIndex, self.state_dict)
             if selected_piece.check_move(toIndex):
                 update_state()
             return self.state_dict
     
+        # queen
         if piece_name == 'Q':
             selected_piece = piece.Queen(piece_color, fromIndex, self.state_dict)
             if selected_piece.check_move(toIndex):
                 update_state()
             return self.state_dict
         
+        # king
         if piece_name == 'K':
             selected_piece = piece.King(piece_color, fromIndex, self.state_dict)
             if selected_piece.check_move(toIndex):
