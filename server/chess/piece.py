@@ -62,6 +62,9 @@ class King(Piece):
         if self.state['black_can_castle_long'] and self.position == 4 and long_castle_sapce:
             moves.append(2) 
 
+        # delete moves which create check
+        print(moves)
+
         return moves
         
 
