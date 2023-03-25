@@ -1,3 +1,5 @@
+# show me a 8x8 grid of integers start from the top left at 0 ending at the bottom right at 63 with boxes around each number, like a chess board
+
 import piece as piece
 
 def update_str(string, value, index):

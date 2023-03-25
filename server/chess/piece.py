@@ -28,17 +28,47 @@ class King(Piece):
 
     def in_check(self, target):
         # vertical
-        pos = target
-        while pos > -1:
-            print('state', pos, self.state['colors'][pos], self.state['pieces'][pos])
-            if not (self.state['colors'][pos] == self.color or self.state['colors'][pos] == 'E'):
-                if (self.state['pieces'] == 'R' or self.state['pieces'] == 'Q'):
-                    print(f'{pos} is bad')
+        pos = target - 8
+        while pos > -1: # up
+            if self.state['colors'][pos] == self.color:
+                break
+            if not self.state['colors'][pos] == 'E':
+                if (self.state['pieces'][pos] == 'R' or self.state['pieces'][pos] == 'Q'):
                     return True
                 else:
                     break
             pos -= 8
+        pos = target + 8
+        while pos < 64: # down
+            if self.state['colors'][pos] == self.color:
+                break            
+            if not self.state['colors'][pos] == 'E':
+                if (self.state['pieces'][pos] == 'R' or self.state['pieces'][pos] == 'Q'):
+                    return True
+                else:
+                    break
+            pos += 8
         # horizontal
+        pos = target - 1
+        while ((pos % 8) < 7): # left
+            if self.state['colors'][pos] == self.color:
+                break            
+            if not self.state['colors'][pos] == 'E':
+                if (self.state['pieces'][pos] == 'R' or self.state['pieces'][pos] == 'Q'):
+                    return True
+                else:
+                    break
+            pos -= 1
+        pos = target + 1
+        while ((pos % 8) > 0): # right
+            if self.state['colors'][pos] == self.color:
+                break            
+            if not self.state['colors'][pos] == 'E':
+                if (self.state['pieces'][pos] == 'R' or self.state['pieces'][pos] == 'Q'):
+                    return True
+                else:
+                    break
+            pos += 1
         # diagonal ++
         # diagonal +-
         # diagonal -+
@@ -83,10 +113,15 @@ class King(Piece):
             moves.append(2) 
 
         # delete moves which create check
+        print(moves)
+        check_moves = []
         for m in moves:
             if self.in_check(m):
-                print('in check')
-                moves.remove(m)
+                print('in check', m)
+                check_moves.append(m)
+
+        for m in check_moves:
+            moves.remove(m)
 
         print(moves)
         return moves
