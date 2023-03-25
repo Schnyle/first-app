@@ -26,6 +26,26 @@ class King(Piece):
     def __init__(self, color, position, state):
         super().__init__(color, position, state)
 
+    def in_check(self, target):
+        # vertical
+        pos = target
+        while pos > -1:
+            print('state', pos, self.state['colors'][pos], self.state['pieces'][pos])
+            if not (self.state['colors'][pos] == self.color or self.state['colors'][pos] == 'E'):
+                if (self.state['pieces'] == 'R' or self.state['pieces'] == 'Q'):
+                    print(f'{pos} is bad')
+                    return True
+                else:
+                    break
+            pos -= 8
+        # horizontal
+        # diagonal ++
+        # diagonal +-
+        # diagonal -+
+        # diagonal --
+
+        return False
+
     def get_moves(self):
         [row, col] = pos_to_cart(self.position)
         moves = []
@@ -63,9 +83,15 @@ class King(Piece):
             moves.append(2) 
 
         # delete moves which create check
-        print(moves)
+        for m in moves:
+            if self.in_check(m):
+                print('in check')
+                moves.remove(m)
 
+        print(moves)
         return moves
+    
+
         
 
 class Queen(Piece):

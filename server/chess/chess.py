@@ -22,7 +22,7 @@ class Chess:
         if piece_name == 'K':
             king_index = toIndex
 
-        print(king_index)
+        # print(king_index)
         
         def update_state():
             self.state_dict['pieces'] = update_str(self.state_dict['pieces'], 'E', fromIndex)

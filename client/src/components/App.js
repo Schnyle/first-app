@@ -49,6 +49,11 @@ function App() {
     }
   ]);
 
+  function resetBoard() {
+    fetch('http://127.0.0.1:5555/seed')
+    window.location.reload();
+  }
+
   useEffect(() => {
     fetch('http://127.0.0.1:5555/moves')
       .then(r => r.json())
@@ -102,6 +107,7 @@ function App() {
     <>
       <GlobalStyle />
       <h1>Chess by Kyle</h1>
+      <button onClick={resetBoard}>RESET BOARD</button>
       <div className='game-container'>
         <Board 
           gameState={gameState}
