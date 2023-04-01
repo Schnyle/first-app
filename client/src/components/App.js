@@ -106,7 +106,9 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <h1>Chess by Kyle</h1>
+      <h1>Chess is Hard</h1>
+      <a href='https://github.com/Schnyle/first-app'>source</a>
+      <br />
       <button onClick={resetBoard}>RESET BOARD</button>
       <div className='game-container'>
         <Board 
