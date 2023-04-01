@@ -46,14 +46,14 @@ const reshape = (array) => {
     let i = 0;
     for (const element of array) {
         tempArray.push(element);
-        if (tempArray.length == 2) {
+        if (tempArray.length === 2) {
             result.push([i, ...tempArray]);
             tempArray = [];
         };
         i++;
     };
 
-    if (tempArray.length == 1) result.push([i, ...tempArray]);
+    if (tempArray.length === 1) result.push([i, ...tempArray]);
     
     return result
 };
@@ -61,8 +61,8 @@ const reshape = (array) => {
 function Moves({ moves }) {
 
     const moveStrings = moves.slice(1).map(move => {
-        if (move['values']['castle'] == 'short') return 'O-O';
-        if (move['values']['castle'] == 'long') return 'O-O-O';
+        if (move['values']['castle'] === 'short') return 'O-O';
+        if (move['values']['castle'] === 'long') return 'O-O-O';
         
         const color = move['values']['color'];
         const piece = move['values']['piece'];
@@ -73,7 +73,7 @@ function Moves({ moves }) {
         let pieceText;
         pieceText = piece_dictionary_text[`${color}${piece}`];
         
-        if (piece == 'P' && capture) pieceText = fromCoord[0];
+        if (piece === 'P' && capture) pieceText = fromCoord[0];
 
         return `${pieceText}${capture ? 'x' : ''}${toCoord}`
     });

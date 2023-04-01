@@ -74,19 +74,19 @@ function App() {
       .then(r => r.json());
     setGameState(newGameState)
 
-    const validMove = !(gameState.pieces == newGameState.pieces);
+    const validMove = !(gameState.pieces === newGameState.pieces);
     
     if (validMove) setMoveData(moves => {
       const index = moves.slice(-1)[0]['index'] + 1;
 
       let castle = '';
-      if (newGameState['pieces'][toIndex] == 'K' && newGameState['colors'][toIndex] == 'W') {
-        if (fromIndex == 60 && toIndex == 62) castle = 'short';
-        if (fromIndex == 60 && toIndex == 58) castle = 'long';
+      if (newGameState['pieces'][toIndex] === 'K' && newGameState['colors'][toIndex] === 'W') {
+        if (fromIndex === 60 && toIndex === 62) castle = 'short';
+        if (fromIndex === 60 && toIndex === 58) castle = 'long';
       };
-      if (newGameState['pieces'][toIndex] == 'K' && newGameState['colors'][toIndex] == 'B') {
-        if (fromIndex == 4 && toIndex == 6) castle = 'short';
-        if (fromIndex == 4 && toIndex == 2) castle = 'long';
+      if (newGameState['pieces'][toIndex] === 'K' && newGameState['colors'][toIndex] === 'B') {
+        if (fromIndex === 4 && toIndex === 6) castle = 'short';
+        if (fromIndex === 4 && toIndex === 2) castle = 'long';
       };
 
       const values = {
@@ -94,7 +94,7 @@ function App() {
         fromIndex: fromIndex,
         piece: newGameState['pieces'][toIndex],
         color: newGameState['colors'][toIndex],
-        capture: gameState['pieces'][toIndex] != 'E',
+        capture: gameState['pieces'][toIndex] !== 'E',
         castle: castle
       };
       return [...moves, {index, values} ]

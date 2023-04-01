@@ -107,7 +107,7 @@ function Board({ gameState, handleMove }) {
     const pieces_array = gameState.pieces.split('')
     const colors_array = gameState.colors.split('')
 
-    if (pieces_array.length == 0 || colors_array.length == 0) {
+    if (pieces_array.length === 0 || colors_array.length === 0) {
         return <>Chess board data not recieved.</>
     };
 
@@ -117,13 +117,13 @@ function Board({ gameState, handleMove }) {
     for (let i = 0; i < 64; i++) {
         // set color
         let shade;
-        if ((i % 2 == 0 && row % 2 == 0) || (i % 2 == 1 && row % 2 == 1)) {
+        if ((i % 2 === 0 && row % 2 === 0) || (i % 2 === 1 && row % 2 === 1)) {
             shade = 'light'
         } else shade = 'dark';
 
         // set piece
         let piecePng;
-        if (colors_array[i] == 'E') {
+        if (colors_array[i] === 'E') {
             piecePng = ''
         } else {
             const color = colors_array[i];
@@ -146,7 +146,7 @@ function Board({ gameState, handleMove }) {
               bounds='.board-container'
               position={positions[id]}
             >
-              <img draggable='false' src={piecePng} />
+              <img draggable='false' src={piecePng} alt={''}/>
             </Draggable>
             <div 
               id={square_id} 
@@ -155,7 +155,7 @@ function Board({ gameState, handleMove }) {
           </div>
         )
         
-        if ((i + 1) % 8 == 0) {
+        if ((i + 1) % 8 === 0) {
             row += 1
         };
     }
