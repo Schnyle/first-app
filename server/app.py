@@ -1,17 +1,31 @@
 import sys
+import os
 sys.path.insert(0, './chess')
 
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, render_template
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_cors import CORS
+from dotenv import load_dotenv
+load_dotenv()
 
 from models import db, Move
 from chess import Chess
 
-app = Flask(__name__)
+print(os.environ.get('DATABASE_URI'))
+
+app = Flask(
+    __name__,
+    static_url_path='',
+    static_folder='../client/build',
+    template_folder='../client/build'
+)
+@app.route('/')
+@app.route('/<int:id>')
+def index(id=0):
+    return render_template('index.html')
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
@@ -78,8 +92,8 @@ def seed():
     Move.query.delete()
 
     starting_position = Move(
-        pieces = 'RHBQKBHRPPPEEPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEPPPEEPPPRHBQKBHR',
-        colors = 'BBBBBBBBBBBEEBBBEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWEEWWWWWWWWWWW',
+        pieces = 'RHBQKBHRPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEPPPPPPPPRHBQKBHR',
+        colors = 'BBBBBBBBBBBBBBBBEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWW',
         whites_turn = True,
         toIndex = None,
         fromIndex = None,

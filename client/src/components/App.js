@@ -50,12 +50,12 @@ function App() {
   ]);
 
   function resetBoard() {
-    fetch('http://127.0.0.1:5555/seed')
+    fetch('/seed')
     window.location.reload();
   }
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5555/moves')
+    fetch('/moves')
       .then(r => r.json())
       .then(data => {setGameState(data.slice(-1)[0])})
   }, []);
@@ -70,7 +70,7 @@ function App() {
       body: JSON.stringify({fromIndex, toIndex,}),
     };
 
-    const newGameState = await fetch('http://127.0.0.1:5555/moves', configObj)
+    const newGameState = await fetch('/moves', configObj)
       .then(r => r.json());
     setGameState(newGameState)
 
